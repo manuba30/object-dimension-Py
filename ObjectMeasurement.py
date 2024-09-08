@@ -19,11 +19,16 @@ while True:
         print("Erro ao carregar a imagem!")
         break
 
-    img = cv2.resize(img, (0, 0), None, 0.3, 0.3)  # Reduz para 30% do tamanho original (ajuste conforme necessário)
+    img = cv2.resize(img, (0, 0), None, 0.3, 0.3)
 
-    img, finalContours = utilities.getContours(img, showCanny=True, draw=True)
+    img, finalContours = utilities.getContours(img, showCanny=True,
+                                               minArea=50000,filter=4)
 
-    # Exibe a imagem redimensionada com contornos
+    if len(finalContours) != 0:
+        biggest = finalContours[0][2]
+        #print(biggest)
+        utilities.WarpImg(img, biggest, 100, 100)
+
     cv2.imshow('original', img)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
